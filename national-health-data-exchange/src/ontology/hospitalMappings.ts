@@ -1,204 +1,206 @@
-import React from 'react';
-import { HospitalSystemMappings } from '../ontology/hospitalMappings';
-
-export function CentralDashboard({ hospitals }: { hospitals: any[] }) {
-  // Calculate real statistics
-  const stats = {
-    totalHospitals: hospitals.length,
-    connectedHospitals: hospitals.filter(h => h.status === 'connected' || h.status === 'pending').length, // Count all registered hospitals as connected for demo
-    totalMappings: hospitals.reduce((total, hospital) => {
-      const systemType = hospital.systemType as keyof typeof HospitalSystemMappings;
-      const mappings = HospitalSystemMappings[systemType]?.fieldMappings || {};
-      return total + Object.keys(mappings).length;
-    }, 0),
-    dataQualityScore: hospitals.length > 0 ? 96.5 : 0,
-    complianceScore: hospitals.length > 0 ? 94.2 : 0
-  };
-
-  const getStatusColor = (score: number) => {
-    if (score >= 95) return '#059669'; // green
-    if (score >= 85) return '#d97706'; // orange
-    return '#dc2626'; // red
-  };
-
-  // Calculate actual progress percentage
-  const overallProgress = hospitals.length > 0 ? 100 : 0; // All hospitals are fully onboarded in demo
-
-  return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{
-        background: 'white',
-        padding: '2rem',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-      }}>
-        <h2 style={{ color: '#1e40af', marginBottom: '2rem' }}>
-          📊 Central Hub Dashboard
-        </h2>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '1rem',
-          marginBottom: '2rem'
-        }}>
-          {[
-            { label: 'Total Hospitals', value: stats.totalHospitals, color: '#1e40af' },
-            { label: 'Connected', value: stats.connectedHospitals, color: '#059669' },
-            { label: 'Field Mappings', value: stats.totalMappings, color: '#7c3aed' },
-            { label: 'Data Quality', value: `${stats.dataQualityScore}%`, color: getStatusColor(stats.dataQualityScore) }
-          ].map(metric => (
-            <div key={metric.label} style={{
-              padding: '1.5rem',
-              background: '#f8f9fa',
-              border: `2px solid ${metric.color}`,
-              borderRadius: '8px',
-              textAlign: 'center'
-            }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: metric.color }}>
-                {metric.value}
-              </div>
-              <div style={{ color: metric.color, fontWeight: 'bold' }}>
-                {metric.label}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ marginBottom: '2rem' }}>
-          <h3>Multi-Hospital Overview</h3>
-          {hospitals.length === 0 ? (
-            <div style={{ 
-              padding: '2rem', 
-              textAlign: 'center', 
-              background: '#f8f9fa', 
-              borderRadius: '4px',
-              color: '#6c757d'
-            }}>
-              No hospitals registered yet. Start by adding hospitals in the Registration Portal.
-            </div>
-          ) : (
-            <div style={{
-              display: 'grid',
-              gap: '1rem'
-            }}>
-              {hospitals.map(hospital => (
-                <div key={hospital.id} style={{
-                  padding: '1rem',
-                  border: '1px solid #dee2e6',
-                  borderRadius: '4px',
-                  display: 'grid',
-                  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr',
-                  gap: '1rem',
-                  alignItems: 'center'
-                }}>
-                  <div>
-                    <strong>{hospital.name}</strong>
-                    <div style={{ fontSize: '0.9rem', color: '#6c757d' }}>
-                      {hospital.systemName}
-                    </div>
-                  </div>
-                  <div>
-                    <div style={{ 
-                      display: 'inline-block',
-                      padding: '0.25rem 0.5rem',
-                      background: '#dcfce7',
-                      color: '#065f46',
-                      borderRadius: '12px',
-                      fontSize: '0.8rem',
-                      fontWeight: 'bold'
-                    }}>
-                      ✅ Connected
-                    </div>
-                  </div>
-                  <div>
-                    <strong>85%</strong>
-                    <div style={{ fontSize: '0.8rem', color: '#6c757d' }}>Mapping Complete</div>
-                  </div>
-                  <div>
-                    <strong style={{ color: getStatusColor(92) }}>92%</strong>
-                    <div style={{ fontSize: '0.8rem', color: '#6c757d' }}>Data Quality</div>
-                  </div>
-                  <div>
-                    <strong style={{ color: getStatusColor(88) }}>88%</strong>
-                    <div style={{ fontSize: '0.8rem', color: '#6c757d' }}>Compliance</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {hospitals.length > 0 && (
-          <div style={{
-            background: 'linear-gradient(135deg, #1e40af 0%, #3730a3 100%)',
-            color: 'white',
-            padding: '2rem',
-            borderRadius: '8px',
-            textAlign: 'center'
-          }}>
-            <h3>✅ Ready for Production Certification</h3>
-            <p style={{ marginBottom: '1rem' }}>
-              All registered hospitals have successfully completed the ontology mapping process.
-              Data quality and compliance scores meet production standards.
-            </p>
-            <button style={{
-              background: 'white',
-              color: '#1e40af',
-              padding: '0.75rem 1.5rem',
-              border: 'none',
-              borderRadius: '4px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              margin: '0 0.5rem'
-            }}>
-              📄 Generate Compliance Report
-            </button>
-            <button style={{
-              background: 'transparent',
-              color: 'white',
-              padding: '0.75rem 1.5rem',
-              border: '2px solid white',
-              borderRadius: '4px',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              margin: '0 0.5rem'
-            }}>
-              🏆 Issue Certification
-            </button>
-          </div>
-        )}
-
-        {hospitals.length > 0 && (
-          <div style={{ marginTop: '2rem', padding: '1.5rem', background: '#f8f9fa', borderRadius: '8px' }}>
-            <h3>Executive Summary</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
-              <div>
-                <strong>Overall Progress:</strong> {overallProgress}%
-                <div style={{ width: '100%', background: '#e5e7eb', borderRadius: '4px', height: '8px', marginTop: '0.5rem' }}>
-                  <div style={{ 
-                    width: `${overallProgress}%`, 
-                    background: '#059669', 
-                    height: '8px', 
-                    borderRadius: '4px' 
-                  }}></div>
-                </div>
-              </div>
-              <div>
-                <strong>Average Data Quality:</strong> {stats.dataQualityScore}%
-                <div style={{ width: '100%', background: '#e5e7eb', borderRadius: '4px', height: '8px', marginTop: '0.5rem' }}>
-                  <div style={{ 
-                    width: `${stats.dataQualityScore}%`, 
-                    background: getStatusColor(stats.dataQualityScore), 
-                    height: '8px', 
-                    borderRadius: '4px' 
-                  }}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+// PRE-CONFIGURED HOSPITAL SYSTEM MAPPINGS WITH ONTOLOGY SUPPORT
+export const HospitalSystemMappings = {
+  'legacy_ehr_v1': {
+    name: 'Legacy EHR System v1.0',
+    format: 'CSV',
+    description: 'Older electronic health record system with custom coding',
+    fieldMappings: {
+      'PT_ID': { 
+        target: 'nationalPatientId', 
+        confidence: 0.95, 
+        ontology: 'patient.identity',
+        transformation: 'direct'
+      },
+      'PATIENT_NAME': { 
+        target: 'fullName', 
+        confidence: 0.90, 
+        ontology: 'patient.demographic.name',
+        transformation: 'direct'
+      },
+      'BIRTH_DATE': { 
+        target: 'dateOfBirth', 
+        confidence: 0.98, 
+        ontology: 'patient.demographic.birthdate',
+        transformation: 'date_standardization'
+      },
+      'VISIT_TYPE': { 
+        target: 'encounterType', 
+        confidence: 0.85, 
+        ontology: 'encounter.type',
+        transformation: 'code_mapping'
+      },
+      'LAB_TEST_CODE': { 
+        target: 'testName', 
+        confidence: 0.88, 
+        ontology: 'laboratory.test.name',
+        transformation: 'loinc_mapping'
+      },
+      'GENDER': { 
+        target: 'gender', 
+        confidence: 0.92, 
+        ontology: 'patient.demographic.gender',
+        transformation: 'hl7_gender_mapping'
+      }
+    }
+  },
+  
+  'medsoft_international': {
+    name: 'MedSoft International EHR',
+    format: 'JSON',
+    description: 'Modern EHR system with international standards support',
+    fieldMappings: {
+      'PatientID': { 
+        target: 'nationalPatientId', 
+        confidence: 0.92, 
+        ontology: 'patient.identity',
+        transformation: 'direct'
+      },
+      'FullName': { 
+        target: 'fullName', 
+        confidence: 0.94, 
+        ontology: 'patient.demographic.name',
+        transformation: 'direct'
+      },
+      'DOB': { 
+        target: 'dateOfBirth', 
+        confidence: 0.96, 
+        ontology: 'patient.demographic.birthdate',
+        transformation: 'date_standardization'
+      },
+      'VisitType': { 
+        target: 'encounterType', 
+        confidence: 0.88, 
+        ontology: 'encounter.type',
+        transformation: 'code_mapping'
+      },
+      'LabTest': { 
+        target: 'testName', 
+        confidence: 0.91, 
+        ontology: 'laboratory.test.name',
+        transformation: 'loinc_mapping'
+      },
+      'MedicationName': { 
+        target: 'medicationName', 
+        confidence: 0.89, 
+        ontology: 'medication.name',
+        transformation: 'rxnorm_mapping'
+      }
+    }
+  },
+  
+  'claimmaster_pro': {
+    name: 'ClaimMaster Professional Billing',
+    format: 'Billing',
+    description: 'Healthcare billing and claims management system',
+    fieldMappings: {
+      'SubscriberID': { 
+        target: 'nationalPatientId', 
+        confidence: 0.89, 
+        ontology: 'patient.identity',
+        transformation: 'direct'
+      },
+      'PatientName': { 
+        target: 'fullName', 
+        confidence: 0.93, 
+        ontology: 'patient.demographic.name',
+        transformation: 'direct'
+      },
+      'ServiceDate': { 
+        target: 'startDate', 
+        confidence: 0.87, 
+        ontology: 'encounter.timing.start',
+        transformation: 'date_standardization'
+      },
+      'ProcedureCode': { 
+        target: 'encounterType', 
+        confidence: 0.82, 
+        ontology: 'encounter.type',
+        transformation: 'cpt_mapping'
+      },
+      'BilledAmount': { 
+        target: 'amount', 
+        confidence: 0.95, 
+        ontology: 'claim.amount',
+        transformation: 'direct'
+      }
+    }
+  },
+  'labsystem_5000': {
+  name: 'LabSystem 5000 LIS',
+  format: 'HL7v2',
+  description: 'Laboratory information system with HL7v2 interface',
+  fieldMappings: {
+    'SpecimenID': { 
+      target: 'testId', 
+      confidence: 0.96, 
+      ontology: 'laboratory.test.identity',
+      transformation: 'direct'
+    },
+    'PatientID': { 
+      target: 'patientId', 
+      confidence: 0.94, 
+      ontology: 'patient.identity',
+      transformation: 'direct'
+    },
+    'TestCode': { 
+      target: 'testName', 
+      confidence: 0.97, 
+      ontology: 'laboratory.test.name',
+      transformation: 'loinc_mapping'
+    },
+    'ResultValue': { 
+      target: 'resultValue', 
+      confidence: 0.99, 
+      ontology: 'laboratory.result.value',
+      transformation: 'direct'
+    },
+    'Units': { 
+      target: 'resultUnit', 
+      confidence: 0.98, 
+      ontology: 'laboratory.result.unit',
+      transformation: 'unit_standardization'
+    }
+  }
 }
+};
+
+// SEMANTIC HARMONIZATION ACROSS HEALTHCARE TERMINOLOGIES
+export const TerminologyCrosswalks = {
+  // HL7 Gender Codes
+  'hl7_gender': {
+    'M': { standard: 'Male', code: 'M', system: 'HL7' },
+    'F': { standard: 'Female', code: 'F', system: 'HL7' },
+    'U': { standard: 'Unknown', code: 'U', system: 'HL7' },
+    'O': { standard: 'Other', code: 'O', system: 'HL7' }
+  },
+  
+  // LOINC Laboratory Codes
+  'loinc_codes': {
+    'GLUCOSE': { standard: 'Glucose', code: '2345-7', system: 'LOINC' },
+    'HEMOGLOBIN': { standard: 'Hemoglobin', code: '718-7', system: 'LOINC' },
+    'CHOLESTEROL': { standard: 'Cholesterol', code: '2093-3', system: 'LOINC' }
+  },
+  
+  // RxNorm Medication Codes
+  'rxnorm_codes': {
+    'AMOXICILLIN': { standard: 'Amoxicillin', code: '723', system: 'RxNorm' },
+    'LISINOPRIL': { standard: 'Lisinopril', code: '29046', system: 'RxNorm' },
+    'ATORVASTATIN': { standard: 'Atorvastatin', code: '83367', system: 'RxNorm' }
+  },
+  
+  // CPT Procedure Codes
+  'cpt_codes': {
+    'AMB': { standard: 'Office Visit', code: '99213', system: 'CPT' },
+    'EMER': { standard: 'Emergency Visit', code: '99284', system: 'CPT' },
+    'SURGERY': { standard: 'Surgery', code: '49505', system: 'CPT' }
+  },
+  
+  // Encounter Type Mapping
+  'encounter_types': {
+    'AMB': { standard: 'Ambulatory', code: 'AMB', system: 'Encounter-Type' },
+    'EMER': { standard: 'Emergency', code: 'EMER', system: 'Encounter-Type' },
+    'IMP': { standard: 'Inpatient', code: 'IMP', system: 'Encounter-Type' },
+    'OP': { standard: 'Outpatient', code: 'OP', system: 'Encounter-Type' }
+  }
+
+};
