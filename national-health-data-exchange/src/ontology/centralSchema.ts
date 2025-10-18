@@ -197,12 +197,28 @@ export const OntologyConcepts = {
   'patient.demographic.name': { domain: 'Patient', concept: 'Personal Name', priority: 'high' },
   'patient.demographic.birthdate': { domain: 'Patient', concept: 'Date of Birth', priority: 'high' },
   'patient.demographic.gender': { domain: 'Patient', concept: 'Administrative Gender', priority: 'medium' },
+  'patient.demographic.nationality': { domain: 'Patient', concept: 'Nationality Information', priority: 'low' },
+  'patient.demographic.address': { domain: 'Patient', concept: 'Physical Location', priority: 'medium' },
+  
   'encounter.identity': { domain: 'Encounter', concept: 'Encounter Identification', priority: 'high' },
   'encounter.type': { domain: 'Encounter', concept: 'Visit Classification', priority: 'high' },
+  'encounter.timing.start': { domain: 'Encounter', concept: 'Visit Start Time', priority: 'high' },
+  'facility.department': { domain: 'Encounter', concept: 'Healthcare Department', priority: 'medium' },
+  'encounter.priority': { domain: 'Encounter', concept: 'Visit Urgency', priority: 'medium' },
+  
   'laboratory.test.identity': { domain: 'Laboratory', concept: 'Test Identification', priority: 'high' },
   'laboratory.test.name': { domain: 'Laboratory', concept: 'Test Procedure', priority: 'high' },
+  'laboratory.result.value': { domain: 'Laboratory', concept: 'Test Result Value', priority: 'high' },
+  'laboratory.result.unit': { domain: 'Laboratory', concept: 'Measurement Unit', priority: 'high' },
+  'laboratory.result.reference': { domain: 'Laboratory', concept: 'Normal Range', priority: 'medium' },
+  
   'medication.identity': { domain: 'Pharmaceutical', concept: 'Prescription Identification', priority: 'high' },
   'medication.name': { domain: 'Pharmaceutical', concept: 'Drug Identification', priority: 'high' },
+  'medication.dosage': { domain: 'Pharmaceutical', concept: 'Dosage Instructions', priority: 'medium' },
+  'medication.frequency': { domain: 'Pharmaceutical', concept: 'Administration Schedule', priority: 'medium' },
+  
   'claim.identity': { domain: 'Claims', concept: 'Claim Identification', priority: 'high' },
-  'claim.procedure': { domain: 'Claims', concept: 'Billing Procedure', priority: 'medium' }
+  'claim.service_date': { domain: 'Claims', concept: 'Service Date', priority: 'high' },
+  'claim.procedure': { domain: 'Claims', concept: 'Billing Procedure', priority: 'medium' },
+  'claim.amount': { domain: 'Claims', concept: 'Billed Amount', priority: 'high' }
 };
