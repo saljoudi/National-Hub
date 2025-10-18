@@ -125,44 +125,43 @@ export const HospitalSystemMappings = {
       }
     }
   },
-  
   'labsystem_5000': {
-    name: 'LabSystem 5000 LIS',
-    format: 'HL7v2',
-    description: 'Laboratory information system with HL7v2 interface',
-    fieldMappings: {
-      'SpecimenID': { 
-        target: 'testId', 
-        confidence: 0.96, 
-        ontology: 'laboratory.test.identity',
-        transformation: 'direct'
-      },
-      'PatientID': { 
-        target: 'patientId', 
-        confidence: 0.94, 
-        ontology: 'patient.identity',
-        transformation: 'direct'
-      },
-      'TestCode': { 
-        target: 'testName', 
-        confidence: 0.97, 
-        ontology: 'laboratory.test.name',
-        transformation: 'loinc_mapping'
-      },
-      'ResultValue': { 
-        target: 'resultValue', 
-        confidence: 0.99, 
-        ontology: 'laboratory.result.value',
-        transformation: 'direct'
-      },
-      'Units': { 
-        target: 'resultUnit', 
-        confidence: 0.98, 
-        ontology: 'laboratory.result.unit',
-        transformation: 'unit_standardization'
-      }
+  name: 'LabSystem 5000 LIS',
+  format: 'HL7v2',
+  description: 'Laboratory information system with HL7v2 interface',
+  fieldMappings: {
+    'SpecimenID': { 
+      target: 'testId', 
+      confidence: 0.96, 
+      ontology: 'laboratory.test.identity',
+      transformation: 'direct'
+    },
+    'PatientID': { 
+      target: 'patientId', 
+      confidence: 0.94, 
+      ontology: 'patient.identity',
+      transformation: 'direct'
+    },
+    'TestCode': { 
+      target: 'testName', 
+      confidence: 0.97, 
+      ontology: 'laboratory.test.name',
+      transformation: 'loinc_mapping'
+    },
+    'ResultValue': { 
+      target: 'resultValue', 
+      confidence: 0.99, 
+      ontology: 'laboratory.result.value',
+      transformation: 'direct'
+    },
+    'Units': { 
+      target: 'resultUnit', 
+      confidence: 0.98, 
+      ontology: 'laboratory.result.unit',
+      transformation: 'unit_standardization'
     }
   }
+}
 };
 
 // SEMANTIC HARMONIZATION ACROSS HEALTHCARE TERMINOLOGIES
@@ -203,4 +202,5 @@ export const TerminologyCrosswalks = {
     'IMP': { standard: 'Inpatient', code: 'IMP', system: 'Encounter-Type' },
     'OP': { standard: 'Outpatient', code: 'OP', system: 'Encounter-Type' }
   }
+
 };
